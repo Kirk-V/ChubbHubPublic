@@ -1,0 +1,296 @@
+﻿<UserControl x:Class="ChubbHubMVVM.Views.FacultyHubView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChubbHubMVVM.Views"
+             mc:Ignorable="d" 
+             VerticalAlignment="Stretch"
+             HorizontalAlignment="Stretch"
+             MinHeight="450"
+             MinWidth="800">
+    <UserControl.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        
+        <Grid.Resources>
+            <DataTemplate x:Key="DataGridAuthorityGroupTemplate">
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Background="Black"
+                BorderBrush="White"
+                BorderThickness="1" 
+                CornerRadius="5,5,5,5"
+                Margin="0,0,10,0"
+                Padding="5">
+            <StackPanel>
+                <Button 
+                    x:Name="SelectFacultyFile"
+                    Style="{StaticResource SelectFileButton}"
+                    Command="{Binding SelectFacultyFileCommand}"
+                    Content="Select Faculty File"/>
+                <Label 
+                    x:Name="FacultyFileLabel"
+                    Foreground="White"
+                    Height="30" 
+                    FontSize="14"                   
+                    Content="{Binding FacultyFileName}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Foreground="White">Filter Users</Label>
+                    <ComboBox
+                        x:Name="FilterCombo"
+                        ItemsSource="{Binding ComboViewItems}" 
+                        SelectedItem="{Binding SelectedView}"  
+                        Height="20" 
+                        Width="100" 
+                        Margin="10,5,10,5">
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+
+        <StackPanel 
+            Orientation="Horizontal" 
+            Grid.Column="0" 
+            Grid.Row="3"
+            Visibility="{Binding UnmatchedSettingsVisibility}">
+            <Button x:Name="CreateFacultyImportButton" Margin="5,5" Width="80" Command="{Binding CreateFacultyFileCommand}" FontSize="10" >Import File</Button>
+            <Button x:Name="CreateFacultyImportCSVButton" Margin="5,5" Width="80" Command="{Binding CreateFacultyFileCommand}" CommandParameter="True">CSV</Button>
+        </StackPanel>
+
+        <StackPanel 
+            Orientation="Horizontal" 
+            Grid.Column="0"
+            Grid.Row="3"
+            Visibility="{Binding MatchedSettingsVisibility}">
+            <Button     
+                Margin="5,5" 
+                Width="80" 
+                Command="{Binding ExportMatchedCSVCommand}" 
+                FontSize="10" 
+                Content="CSV Report"/>
+        </StackPanel>
+
+        <Border
+            Grid.Column="0"
+            Grid.Row="3"
+            CornerRadius="8"
+            VerticalAlignment="Stretch">
+            
+            <DockPanel  
+                HorizontalAlignment="Stretch"
+                Visibility="{Binding AllUsersSettingsVisibility}">
+                <Button   
+                    DockPanel.Dock="Left"
+                    HorizontalAlignment="Left"
+                    Margin="5,5,15,5" 
+                    MaxWidth="160"
+                    Width="160"
+                    Style="{StaticResource MakeFilesButton}"
+                    FontSize="12" 
+                    Command="{Binding CreateMatchedUnmatched}"
+                    Content="Create Matched/Unmatched">
+                </Button>
+                <TextBlock
+                    DockPanel.Dock="Right"
+                    Width="60"
+                    Foreground="White"
+                    Text="Done"
+                    Visibility="{Binding MadeMatchedAndUnmatched, Converter={StaticResource BooleanToVisibilityConverter}}">
+                </TextBlock>
+            </DockPanel>
+
+        </Border>
+        
+
+        <DataGrid 
+            x:Name="FacultyDataGrid"
+            Background="Transparent"
+            AutoGenerateColumns="False"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Grid.RowSpan="4" 
+            ItemsSource="{Binding GridViewWrapper}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Chubb"
+                    Binding="{Binding ChubbNumber}"/>
+                <DataGridTextColumn
+                    Header="FirstName"
+                    Binding="{Binding FirstName}"/>
+                <DataGridTextColumn
+                    Header="LastName"
+                    Binding="{Binding LastName}"/>
+                <DataGridTextColumn
+                    Header="Card"
+                    Binding="{Binding WesternId}"/>
+                <DataGridTextColumn
+                    Header="Department"
+                    Binding="{Binding DepartmentLabel}"/>
+                <DataGridTextColumn
+                    Header="Code"
+                    Binding="{Binding DeptCode}"/>
+                <DataGridTemplateColumn
+                    Header="Authority"
+                    CellTemplate="{StaticResource AuthorityCellTemplate}" 
+                    CellEditingTemplate="{StaticResource AuthorityEditTemplate}"/>
+                <DataGridTextColumn
+                    Header="Pin"
+                    Binding="{Binding Pin}"/>
+                <DataGridTemplateColumn
+                    Header="Expiry"
+                    CellTemplate="{StaticResource AuthorityExpiryTemplate}"
+                    CellEditingTemplate="{StaticResource AuthorityExpiryEditTemplate}"/>
+                <DataGridTemplateColumn
+                    Header="Authority +"
+                    CellTemplate="{StaticResource AuthorityPlusCellTemplate}"
+                    CellEditingTemplate="{StaticResource AuthorityPlusEditTemplate}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border
+            Margin="0,5,10,0" 
+            Grid.Row="1" 
+            
+            Height="auto"
+            BorderThickness="1"
+            CornerRadius="3"
+            BorderBrush="White"
+            Background="#000" >
+            <StackPanel 
+                Margin="5" 
+                Grid.Row="1" 
+                Grid.RowSpan="2" 
+                x:Name="FacultyOptionsPanel" 
+                Height="auto"
+                Background="#000" >
+                <StackPanel
+                        Margin="5" 
+                        IsEnabled="{Binding ViewComboSelection[Unmatched]}"
+                        Visibility="{Binding UnmatchedSettingsVisibility}">
+                    <DockPanel>
+                        <Label 
+                            MinWidth="80"
+                            Foreground="White" 
+                            Content="Filter"/>
+                        <ComboBox
+                            ItemsSource="{Binding Filters}"
+                            SelectedItem="{Binding SelectedFilter}"/>
+                    </DockPanel>
+                    <DockPanel 
+                        Margin="0,5,0,0">
+                        <Label Foreground="White" 
+                               MinWidth="80">
+                            Set Authority
+                        </Label>
+                        <ComboBox 
+                            x:Name="FacultyHub_SetAuthority" 
+                            Visibility="Visible"  
+                            ItemsSource="{Binding AuthorityGroups}" 
+                            SelectedValue="{Binding SelectedAuthorityGroup}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding GroupNumber}" FontWeight="Bold"/>
+                                        <Label Content="{Binding GroupName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" 
+                        Margin="0,5,0,0">
+                        <Label 
+                            DockPanel.Dock="Left"
+                            MinWidth="80"
+                            Foreground="White"
+                            Content="Set Expiry"/>
+                        <DatePicker 
+                            DockPanel.Dock="Left"
+                            SelectedDateFormat="Short" 
+                            FontSize="14"
+                            SelectedDate="{Binding SelectedExpiry, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            />
+                    </DockPanel>
+
+                    <DockPanel 
+                        LastChildFill="True" 
+                        Margin="0,5,0,0">
+                        <Label 
+                            x:Name="pinLabel" 
+                            MinWidth="80" 
+                            Content="Edit Pin" 
+                            Foreground="White"/>
+                        <TextBox 
+                            DockPanel.Dock="Left" 
+                            MinWidth="100" 
+                            FontSize="14" 
+                            Text="{Binding SelectedPin}"/>
+                        <Button 
+                            DockPanel.Dock="Left"
+                            x:Name="FacultyHub_ChangePin"
+                            Width="25"
+                            HorizontalAlignment="Stretch"
+                            Background="White">
+                            <Image Source="../img/checkmark.png"></Image>
+                        </Button>
+                    </DockPanel>
+                    <DockPanel 
+                        LastChildFill="True" 
+                        Margin="0,5,0,0">
+                        <Label 
+                            Content="Chubb Number Min:" 
+                            Foreground="White" 
+                            MinWidth="80"></Label>
+                        <TextBox 
+                            x:Name="ChubbMin"  
+                            Margin="5,0,0,0" 
+                            FontSize="14" 
+                            Text="{Binding MinChubbNumber}"/>
+                    </DockPanel>
+                    <Button 
+                        x:Name="Faculty_FindUserNumbers" 
+                        Command="{Binding AddChubbNumbers}"
+                        Background="#FFD08B72"
+                        Width="120"  
+                        Height="30" 
+                        Margin="0,5,0,0" 
+                        ToolTip="Test" 
+                        Content="Add Chubb Numbers"/>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Label
+                            Foreground="White"
+                            Content="Using: "/>
+                        <Label
+                            Content="{Binding ChubbReportFile}"
+                            Foreground="White"/>
+                    </StackPanel>
+                    
+                </StackPanel>
+                <StackPanel
+                        Background="#2a3231" 
+                        Margin="5" 
+                        IsEnabled="{Binding ViewComboSelection[Matched]}"
+                        Visibility="{Binding MatchedSettingsVisibility}">
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

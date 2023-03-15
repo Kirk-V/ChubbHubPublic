@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ChubbHubMVVM
+namespace ChubbHubMVVM.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for DepartmentHub.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DepartmentHub : UserControl
     {
-        public MainWindow()
+        public DepartmentHub()
         {
             InitializeComponent();
         }

@@ -1,12 +1,119 @@
-﻿<Window x:Class="ChubbHubPublic.MainWindow"
+﻿<Window x:Class="ChubbHubMVVM.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ChubbHubPublic"
+        xmlns:local="clr-namespace:ChubbHubMVVM" 
+        xmlns:views="clr-namespace:ChubbHubMVVM.Views"
+        xmlns:vms ="clr-namespace:ChubbHubMVVM.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" 
+        Width="1056"
+        Height="579">
+    <Window.Resources>
+        <views:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid Background="#272727">
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:ChubbReportViewModel}">
+                <views:UserReportView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:RegistrarHubViewModel}">
+                <views:AddUsersView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:ClassHubViewModel}">
+                <views:ClassHubView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:DepartmentHubViewModel}">
+                <views:DepartmentHubView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:FacultyHubViewModel}">
+                <views:FacultyHubView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:StudentHubViewModel}">
+                <views:StudentHubView/>
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="211*"/>
+            <ColumnDefinition Width="678*"/>
+            <ColumnDefinition Width="167*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <DockPanel 
+            IsEnabled="{Binding Messages.Count}"
+            Background="black"           
+            HorizontalAlignment="Right"
+            Grid.Row="0"
+            Grid.Column="2">
+            <ToggleButton 
+                x:Name="TogglePopupButton" 
+                Height="50" 
+                Width="80" 
+                BorderBrush="Black"
+                Background="black"
+                HorizontalAlignment="Left">
+                <DockPanel
+                    Background="black">
+                    <Image
+                        Width="50" 
+                        Height="50"
+                        Source="\img\notify.png"
+                        Margin="0"/>
+                    <Label
+                        HorizontalAlignment="Left"
+                        Margin="-20, -5, 0,0"
+                        Content="{Binding Messages.Count}"
+                        Foreground="White"/>
+                    
+                    <Popup Name="myPopup" 
+                           IsOpen="{Binding IsChecked, ElementName=TogglePopupButton}"
+                           StaysOpen="False">
+                        <Border BorderThickness="1">
+                            <ListBox 
+                                ItemsSource="{Binding Messages}"/>
+                        </Border>
+                    </Popup>
+                </DockPanel>
+            </ToggleButton>
+        </DockPanel>
+            
+        <TextBlock Text="CHUBB HUB"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Foreground="White"
+                   FontSize="22"
+                   Margin="20,0,0,0"/>
+        <ContentControl 
+            Grid.Column="1"
+            Grid.Row="1"
+            BorderBrush="Black" 
+            BorderThickness="5"
+            Content="{Binding CurrentViewModelWindow}" 
+            Grid.ColumnSpan="2" 
+            Grid.RowSpan="1"/>
 
+        <StackPanel Grid.Column="0" Margin="0,51,0,0" Grid.RowSpan="2">
+            <Button x:Name="ChubbReport" Command="{Binding ChubbReportNavCommand}" Style="{StaticResource NavigationButtonNotSelected}" Content="Chubb Report" Margin="8" Background="#FF48FDE0"/>
+            <Button x:Name="AddUsersButton" Command="{Binding RegistrarHubNavCommand}" Style="{StaticResource NavigationButtonNotSelected}" Content="Registrar Hub"  Margin="8" Background="#FF48FDE0"/>
+            <Button x:Name="DepartmentGroups" Command="{Binding DepartmentGroupsNavCommand}" Style="{StaticResource NavigationButtonNotSelected}"  Content="Department Groups"  Margin="8" Background="#FF48FDE0"/>
+            <Button x:Name="FacultyHubButton" Command="{Binding FacultyHubNavCommand}" Style="{StaticResource NavigationButtonNotSelected}"  Content="Faculty Hub"  Margin="8" Background="#FF48FDE0"/>
+            <Button x:Name="StudentHubButton" Command="{Binding StudentHubNavCommand}" Style="{StaticResource NavigationButtonNotSelected}" Content="Student Hub" Margin="8" Background="#FF48FDE0"/>
+            <Button x:Name="ClassHubButton" Command="{Binding ClassHubNavCommand}" Style="{StaticResource NavigationButtonNotSelected}"  Content="Class Hub" Margin="8" Background="#FF48FDE0"/>
+            
+        </StackPanel>
+        <Button 
+            Grid.Column="0"
+            Grid.Row="1"
+            VerticalAlignment="Bottom"
+            x:Name="ConfigButton" 
+            Command="{Binding ConfigNavCommand}" 
+            Style="{StaticResource NavigationButtonNotSelected}" 
+            Content="Config" 
+            Margin="8" 
+            Background="#8DA7A7"/>
     </Grid>
 </Window>
